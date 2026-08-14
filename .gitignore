@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+uv.lock
+
+# Intermediate collector output. Regenerate with scripts/sample_repos.py.
+# The aggregated results in site/data/ are committed instead.
+data/raw/

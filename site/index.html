@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibecoded Cruft</title>
+<meta name="description" content="A dashboard of how much abandoned, AI-generated code is accumulating on GitHub.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗑️</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <h1>Vibecoded&nbsp;Cruft</h1>
+    <p class="sub">A running count of the code nobody asked for, nobody merged, and nobody came back to.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="counters" id="counters" aria-label="Headline figures"></section>
+
+  <section class="panel">
+    <h2>Commits that admit a robot wrote them</h2>
+    <p class="lede">
+      Commits whose message carries an AI tool's attribution trailer. This is a
+      <em>floor</em>, not a total &mdash; it counts only the ones that owned up.
+    </p>
+    <div class="chart" id="chart-markers"></div>
+    <div class="legend" id="legend-markers"></div>
+    <p class="note" id="note-markers"></p>
+  </section>
+
+  <section class="panel">
+    <h2>How a repository dies</h2>
+    <p class="lede">
+      Every public repo born in a given quarter, sorted by how long it survived. The
+      bottom band is repos whose first push was also their last.
+    </p>
+    <div class="chart" id="chart-fate"></div>
+    <div class="legend" id="legend-fate"></div>
+    <p class="note">Quarters younger than 90 days are omitted: they have not had time to die yet.</p>
+  </section>
+
+  <section class="grid-2">
+    <div class="panel">
+      <h2>Dead on arrival</h2>
+      <p class="lede">Created and never pushed to again after day one.</p>
+      <div class="chart" id="chart-doa"></div>
+      <p class="note">Shaded band is the 95% Wilson interval on the sample.</p>
+    </div>
+    <div class="panel">
+      <h2>Nobody starred it</h2>
+      <p class="lede">Repos sitting at exactly zero stars today.</p>
+      <div class="chart" id="chart-stars"></div>
+      <p class="note">
+        <strong>Not a trend line.</strong> A 2020 repo has had six years to collect a star
+        and a repo from this quarter has had weeks, so the slope here is mostly exposure
+        time, not a change in behaviour. Read each quarter on its own.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <div class="panel">
+      <h2>Repos carrying AI instructions</h2>
+      <p class="lede">
+        Share of repos with a config file left for a coding agent to read &mdash;
+        <code>CLAUDE.md</code>, <code>AGENTS.md</code>, <code>.cursorrules</code>,
+        <code>GEMINI.md</code>, <code>.clinerules</code> and friends.
+      </p>
+      <div class="chart" id="chart-aicfg"></div>
+      <div class="legend" id="legend-aicfg"></div>
+      <p class="note" id="note-aicfg"></p>
+      <p class="note">
+        The most direct fingerprint available: a file put there for a machine to read.
+        Note that the check reads each repo as it stands <em>today</em> &mdash; a repo created
+        in 2022 showing a <code>CLAUDE.md</code> picked it up years later.
+      </p>
+    </div>
+    <div class="panel">
+      <h2>Median lifespan</h2>
+      <p class="lede">Time between a repo's creation and its final push.</p>
+      <div class="chart" id="chart-lifespan"></div>
+      <p class="note" id="note-lifespan"></p>
+      <p class="note">
+        <strong>Also not a trend line</strong>, and for the same reason: a repo cannot
+        outlive its own age, so recent quarters are capped by the calendar rather than by
+        anyone losing interest.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-compare">
+    <h2>Does the AI-assisted stuff die faster?</h2>
+    <p class="lede">
+      The premise of this page was that it would. It doesn't &mdash; it dies far less. But the
+      measurement has a hole in it, described below, and the honest answer is that this
+      comparison cannot settle the question either way.
+    </p>
+    <div class="chart" id="chart-compare"></div>
+    <p class="note" id="note-compare"></p>
+    <p class="note">
+      <strong>Read this one with real suspicion.</strong> The file check looks at each repo
+      as it stands <em>today</em>, not as it stood on day one &mdash; and a repo abandoned
+      after a single push can never come back to add a <code>CLAUDE.md</code>, while a repo
+      someone is still working on can. So "carries AI instructions" is partly just a proxy
+      for "is still alive", which is uncomfortably close to the thing being measured. The
+      scan finds these files in 0.35% of repos created in 2022, years before any of them
+      existed, which is proof the effect is present.
+    </p>
+    <p class="note">
+      Even setting that aside, this would be selection rather than causation: someone who
+      writes instructions for a coding agent is already invested in the project. The tooling
+      is not making repos survive. Compared within quarters, because these files barely
+      existed before 2025 &mdash; pooling across years would measure 2020 against 2026 instead.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Where these numbers come from</h2>
+    <div class="grid-2 methods">
+      <div>
+        <h3>Commit attribution</h3>
+        <p>One <code>search/commits</code> query per tool per month. Exact phrases only:</p>
+        <ul class="queries" id="query-list"></ul>
+      </div>
+      <div>
+        <h3>Repository cohorts</h3>
+        <p>
+          <code>GET /repositories?since=</code> enumerates public repos by ID, and IDs are
+          assigned in creation order &mdash; so an ID range is a date range. Probe points are
+          spread evenly across each quarter, 100 repos per probe, then enriched through
+          GraphQL in batches of 100. Repos are filed under their real
+          <code>createdAt</code>, so a mis-calibrated probe cannot land a repo in the
+          wrong quarter.
+        </p>
+        <p id="sample-size"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel caveats">
+    <h2>Reasons to distrust this page</h2>
+    <p class="lede">Presented up front, because a dashboard with a punchline still has to survive being checked.</p>
+    <ul>
+      <li>
+        <strong>Attribution measures disclosure, not use.</strong> A commit only counts if the
+        tool stamped it. Anyone who deletes the trailer, or whose tool never adds one, is
+        invisible here. Every AI figure on this page is a lower bound.
+      </li>
+      <li>
+        <strong>Search counts are approximate, and more loosely than that word suggests.</strong>
+        GitHub documents <code>total_count</code> as an estimate over public repos and default
+        branches. Running one identical query twice in a day here returned 1,180 and then 95.
+        Read the orders of magnitude on this chart, never the digits.
+      </li>
+      <li>
+        <strong>And the error grows with the number.</strong> Counting the same commits twelve
+        months at a time versus one year at a time should give the same answer. For the small
+        markers it does &mdash; aider agrees to within 1%. For the largest it does not: Claude
+        comes out 2.97&times; higher counted monthly than annually. Whatever GitHub does to
+        estimate these totals degrades as the result set grows, which means the biggest figures
+        on this page are the least trustworthy ones. Monthly counts are used throughout, being
+        the narrower and better-behaved query.
+      </li>
+      <li>
+        <strong>Tools change their commit trailers, and a narrow query stops matching.</strong>
+        Searching <code>"Generated with Claude Code"</code> in April 2026 finds 87,421 commits;
+        <code>"Co-Authored-By: Claude"</code> finds 11.2 million in the same month, because the
+        first line was dropped from the default output. Every marker here is therefore the
+        broad trailer, which lets in a small floor of commits from humans named Claude, Cursor
+        or Devin &mdash; a few thousand a year, visible in the per-year totals. That floor is a
+        far smaller lie than a missing order of magnitude.
+      </li>
+      <li>
+        <strong>Commit dates can be forged.</strong> Committer dates are self-reported, so
+        rebases and history rewrites scatter a few commits into years before the tool that
+        allegedly wrote them existed. Years with fewer than a dozen hits are treated as zero
+        rather than charted as adoption.
+      </li>
+      <li>
+        <strong>"Dead on arrival" undercounts.</strong> <code>pushedAt</code> moves for some
+        events that are not commits, which makes a dead repo occasionally look alive.
+      </li>
+      <li>
+        <strong>Young repos are excluded, deliberately.</strong> A repo created last week has
+        not had the chance to be revisited, so counting it as abandoned manufactures a spike.
+        Every repo here has had at least 30 days to show a second sign of life. Without that
+        floor the current quarter reads 68% dead on arrival instead of 60%.
+      </li>
+      <li>
+        <strong>Only the fixed-window metrics compare across time.</strong> "Dead on arrival"
+        and the 30/90-day death rates ask the same question of every cohort. Star counts and
+        lifespans accumulate for as long as a repo has existed, so those two charts describe
+        each quarter's present state and say nothing reliable about direction.
+      </li>
+      <li>
+        <strong>Repo ID is a calibrated proxy for time, not a linear one.</strong> The ID→date
+        curve is built from sampled anchors and interpolated between them.
+      </li>
+      <li>
+        <strong>Abandonment is not the same as failure.</strong> A scratch repo that did its job
+        in an afternoon is a success that looks identical to garbage from here. The trend
+        across quarters is the interesting part, not any single number.
+      </li>
+      <li>
+        <strong>GH Archive is not the source.</strong> Its event payloads lost commit messages
+        in Nov 2025 and its feed degraded badly in Apr 2026. Everything here is live API.
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-footer wrap">
+  <p id="last-updated">Loading last-updated time&hellip;</p>
+  <p class="self-aware">
+    This page is a static site with no maintainer on call and a README that says
+    "run these scripts by hand." Statistically speaking, it is also going to end up
+    dead on arrival. We'd feel worse about that if the data didn't make it so predictable.
+  </p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

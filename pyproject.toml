@@ -1,0 +1,6 @@
+[project]
+name = "vibecodedcruft"
+version = "0.1.0"
+description = "A dashboard of GitHub's AI-generated landfill"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.27"]

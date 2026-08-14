@@ -1,0 +1,2942 @@
+{
+  "generated_at": "2026-08-14T16:42:45.020456+00:00",
+  "sampled_per_quarter": 10000,
+  "total_repos": 78482,
+  "vanished_between_calls": 0,
+  "min_age_days": 30,
+  "ai_vs_rest": {
+    "method": "within-quarter; only quarters with >=10 repos in both groups",
+    "quarters_used": [
+      "2026Q1",
+      "2026Q2",
+      "2026Q3"
+    ],
+    "with_ai_config": {
+      "n": 74,
+      "dead_on_arrival": [
+        18.92,
+        11.62,
+        29.29
+      ]
+    },
+    "without": {
+      "n": 1386,
+      "dead_on_arrival": [
+        64.86,
+        62.31,
+        67.33
+      ]
+    },
+    "per_quarter": [
+      {
+        "bucket": "2026Q1",
+        "with_ai_config": [
+          14.29,
+          4.01,
+          39.94
+        ],
+        "without": [
+          62.19,
+          56.41,
+          67.64
+        ],
+        "n_ai": 14,
+        "n_rest": 283
+      },
+      {
+        "bucket": "2026Q2",
+        "with_ai_config": [
+          29.63,
+          15.85,
+          48.48
+        ],
+        "without": [
+          66.24,
+          62.67,
+          69.64
+        ],
+        "n_ai": 27,
+        "n_rest": 705
+      },
+      {
+        "bucket": "2026Q3",
+        "with_ai_config": [
+          12.12,
+          4.82,
+          27.33
+        ],
+        "without": [
+          64.32,
+          59.5,
+          68.87
+        ],
+        "n_ai": 33,
+        "n_rest": 398
+      }
+    ]
+  },
+  "cohorts": [
+    {
+      "bucket": "2020Q1",
+      "n": 3089,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.08,
+      "median_disk_kb": 27.0,
+      "dead_on_arrival": [
+        52.02,
+        50.26,
+        53.78
+      ],
+      "zero_stars": [
+        87.5,
+        86.29,
+        88.62
+      ],
+      "zero_forks": [
+        93.2,
+        92.26,
+        94.04
+      ],
+      "archived": [
+        1.0,
+        0.71,
+        1.42
+      ],
+      "empty": [
+        24.77,
+        23.28,
+        26.32
+      ],
+      "ai_checked": 287,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.32
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.32
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.32
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        67.3,
+        65.63,
+        68.94
+      ],
+      "dead_within_90d": [
+        71.67,
+        70.06,
+        73.23
+      ],
+      "fate": {
+        "dead_on_arrival": 52.02,
+        "died_within_30d": 15.28,
+        "died_within_90d": 4.37,
+        "lived_past_90d": 28.33
+      }
+    },
+    {
+      "bucket": "2020Q2",
+      "n": 3166,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.84,
+      "median_disk_kb": 86.5,
+      "dead_on_arrival": [
+        47.09,
+        45.36,
+        48.84
+      ],
+      "zero_stars": [
+        87.71,
+        86.52,
+        88.81
+      ],
+      "zero_forks": [
+        92.67,
+        91.71,
+        93.53
+      ],
+      "archived": [
+        1.52,
+        1.15,
+        2.0
+      ],
+      "empty": [
+        16.61,
+        15.36,
+        17.95
+      ],
+      "ai_checked": 205,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.84
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.84
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.84
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        65.41,
+        63.74,
+        67.05
+      ],
+      "dead_within_90d": [
+        69.17,
+        67.54,
+        70.76
+      ],
+      "fate": {
+        "dead_on_arrival": 47.09,
+        "died_within_30d": 18.32,
+        "died_within_90d": 3.76,
+        "lived_past_90d": 30.83
+      }
+    },
+    {
+      "bucket": "2020Q3",
+      "n": 2683,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.15,
+      "median_disk_kb": 102.0,
+      "dead_on_arrival": [
+        52.07,
+        50.18,
+        53.95
+      ],
+      "zero_stars": [
+        88.41,
+        87.14,
+        89.57
+      ],
+      "zero_forks": [
+        93.51,
+        92.52,
+        94.39
+      ],
+      "archived": [
+        1.27,
+        0.91,
+        1.77
+      ],
+      "empty": [
+        12.86,
+        11.64,
+        14.18
+      ],
+      "ai_checked": 166,
+      "ai_config": [
+        0.0,
+        0.0,
+        2.26
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          2.26
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        71.97,
+        70.24,
+        73.64
+      ],
+      "dead_within_90d": [
+        77.26,
+        75.64,
+        78.81
+      ],
+      "fate": {
+        "dead_on_arrival": 52.07,
+        "died_within_30d": 19.9,
+        "died_within_90d": 5.29,
+        "lived_past_90d": 22.74
+      }
+    },
+    {
+      "bucket": "2020Q4",
+      "n": 3016,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 76.0,
+      "dead_on_arrival": [
+        56.27,
+        54.49,
+        58.03
+      ],
+      "zero_stars": [
+        89.92,
+        88.79,
+        90.94
+      ],
+      "zero_forks": [
+        91.51,
+        90.46,
+        92.45
+      ],
+      "archived": [
+        1.03,
+        0.73,
+        1.46
+      ],
+      "empty": [
+        13.83,
+        12.64,
+        15.1
+      ],
+      "ai_checked": 320,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.19
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.19
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.19
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        78.85,
+        77.35,
+        80.27
+      ],
+      "dead_within_90d": [
+        86.64,
+        85.38,
+        87.81
+      ],
+      "fate": {
+        "dead_on_arrival": 56.27,
+        "died_within_30d": 22.58,
+        "died_within_90d": 7.79,
+        "lived_past_90d": 13.36
+      }
+    },
+    {
+      "bucket": "2021Q1",
+      "n": 3038,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 95.0,
+      "dead_on_arrival": [
+        58.76,
+        57.0,
+        60.49
+      ],
+      "zero_stars": [
+        89.73,
+        88.6,
+        90.76
+      ],
+      "zero_forks": [
+        93.88,
+        92.97,
+        94.68
+      ],
+      "archived": [
+        1.22,
+        0.88,
+        1.67
+      ],
+      "empty": [
+        13.92,
+        12.74,
+        15.2
+      ],
+      "ai_checked": 259,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.46
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.46
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.46
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        80.78,
+        79.34,
+        82.14
+      ],
+      "dead_within_90d": [
+        86.44,
+        85.17,
+        87.61
+      ],
+      "fate": {
+        "dead_on_arrival": 58.76,
+        "died_within_30d": 22.02,
+        "died_within_90d": 5.66,
+        "lived_past_90d": 13.56
+      }
+    },
+    {
+      "bucket": "2021Q2",
+      "n": 3115,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 56.0,
+      "dead_on_arrival": [
+        62.57,
+        60.85,
+        64.25
+      ],
+      "zero_stars": [
+        89.15,
+        88.01,
+        90.19
+      ],
+      "zero_forks": [
+        94.35,
+        93.48,
+        95.11
+      ],
+      "archived": [
+        0.87,
+        0.6,
+        1.26
+      ],
+      "empty": [
+        18.91,
+        17.57,
+        20.32
+      ],
+      "ai_checked": 196,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.92
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.92
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        81.99,
+        80.6,
+        83.3
+      ],
+      "dead_within_90d": [
+        87.35,
+        86.14,
+        88.47
+      ],
+      "fate": {
+        "dead_on_arrival": 62.57,
+        "died_within_30d": 19.42,
+        "died_within_90d": 5.36,
+        "lived_past_90d": 12.65
+      }
+    },
+    {
+      "bucket": "2021Q3",
+      "n": 2858,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.01,
+      "median_disk_kb": 30.0,
+      "dead_on_arrival": [
+        61.93,
+        60.14,
+        63.69
+      ],
+      "zero_stars": [
+        90.52,
+        89.39,
+        91.54
+      ],
+      "zero_forks": [
+        95.31,
+        94.47,
+        96.03
+      ],
+      "archived": [
+        0.63,
+        0.4,
+        0.99
+      ],
+      "empty": [
+        20.89,
+        19.44,
+        22.42
+      ],
+      "ai_checked": 269,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.41
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.41
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.41
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.72,
+        81.29,
+        84.06
+      ],
+      "dead_within_90d": [
+        88.17,
+        86.94,
+        89.31
+      ],
+      "fate": {
+        "dead_on_arrival": 61.93,
+        "died_within_30d": 20.78,
+        "died_within_90d": 5.46,
+        "lived_past_90d": 11.83
+      }
+    },
+    {
+      "bucket": "2021Q4",
+      "n": 3091,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.01,
+      "median_disk_kb": 32.0,
+      "dead_on_arrival": [
+        61.7,
+        59.97,
+        63.39
+      ],
+      "zero_stars": [
+        90.55,
+        89.47,
+        91.53
+      ],
+      "zero_forks": [
+        94.95,
+        94.12,
+        95.67
+      ],
+      "archived": [
+        0.74,
+        0.5,
+        1.11
+      ],
+      "empty": [
+        23.81,
+        22.34,
+        25.34
+      ],
+      "ai_checked": 267,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.42
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.42
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.42
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.63,
+        81.25,
+        83.92
+      ],
+      "dead_within_90d": [
+        88.13,
+        86.94,
+        89.22
+      ],
+      "fate": {
+        "dead_on_arrival": 61.7,
+        "died_within_30d": 20.93,
+        "died_within_90d": 5.5,
+        "lived_past_90d": 11.87
+      }
+    },
+    {
+      "bucket": "2022Q1",
+      "n": 2968,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 39.0,
+      "dead_on_arrival": [
+        60.24,
+        58.47,
+        61.99
+      ],
+      "zero_stars": [
+        91.41,
+        90.35,
+        92.36
+      ],
+      "zero_forks": [
+        95.96,
+        95.19,
+        96.61
+      ],
+      "archived": [
+        0.84,
+        0.57,
+        1.24
+      ],
+      "empty": [
+        21.06,
+        19.63,
+        22.56
+      ],
+      "ai_checked": 246,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.54
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.54
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.54
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        80.49,
+        79.03,
+        81.88
+      ],
+      "dead_within_90d": [
+        86.73,
+        85.46,
+        87.9
+      ],
+      "fate": {
+        "dead_on_arrival": 60.24,
+        "died_within_30d": 20.25,
+        "died_within_90d": 6.23,
+        "lived_past_90d": 13.27
+      }
+    },
+    {
+      "bucket": "2022Q2",
+      "n": 2848,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.01,
+      "median_disk_kb": 41.0,
+      "dead_on_arrival": [
+        62.71,
+        60.92,
+        64.47
+      ],
+      "zero_stars": [
+        90.7,
+        89.57,
+        91.71
+      ],
+      "zero_forks": [
+        95.29,
+        94.45,
+        96.01
+      ],
+      "archived": [
+        0.46,
+        0.27,
+        0.78
+      ],
+      "empty": [
+        20.47,
+        19.03,
+        21.99
+      ],
+      "ai_checked": 285,
+      "ai_config": [
+        0.35,
+        0.06,
+        1.96
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.35,
+          0.06,
+          1.96
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.33
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.33
+        ]
+      },
+      "ai_any_count": 1,
+      "ai_counts": {
+        "claude": 1,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        83.53,
+        82.13,
+        84.85
+      ],
+      "dead_within_90d": [
+        88.59,
+        87.37,
+        89.7
+      ],
+      "fate": {
+        "dead_on_arrival": 62.71,
+        "died_within_30d": 20.82,
+        "died_within_90d": 5.06,
+        "lived_past_90d": 11.41
+      }
+    },
+    {
+      "bucket": "2022Q3",
+      "n": 3033,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 57.0,
+      "dead_on_arrival": [
+        59.22,
+        57.46,
+        60.95
+      ],
+      "zero_stars": [
+        89.85,
+        88.72,
+        90.87
+      ],
+      "zero_forks": [
+        96.08,
+        95.33,
+        96.71
+      ],
+      "archived": [
+        0.63,
+        0.4,
+        0.98
+      ],
+      "empty": [
+        17.14,
+        15.85,
+        18.53
+      ],
+      "ai_checked": 250,
+      "ai_config": [
+        0.4,
+        0.07,
+        2.23
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.4,
+          0.07,
+          2.23
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.51
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.51
+        ]
+      },
+      "ai_any_count": 1,
+      "ai_counts": {
+        "claude": 1,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        81.27,
+        79.84,
+        82.62
+      ],
+      "dead_within_90d": [
+        86.75,
+        85.49,
+        87.91
+      ],
+      "fate": {
+        "dead_on_arrival": 59.22,
+        "died_within_30d": 22.06,
+        "died_within_90d": 5.47,
+        "lived_past_90d": 13.25
+      }
+    },
+    {
+      "bucket": "2022Q4",
+      "n": 2758,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 48.0,
+      "dead_on_arrival": [
+        58.3,
+        56.45,
+        60.13
+      ],
+      "zero_stars": [
+        90.28,
+        89.12,
+        91.33
+      ],
+      "zero_forks": [
+        96.41,
+        95.65,
+        97.04
+      ],
+      "archived": [
+        0.44,
+        0.25,
+        0.76
+      ],
+      "empty": [
+        17.66,
+        16.28,
+        19.13
+      ],
+      "ai_checked": 196,
+      "ai_config": [
+        0.51,
+        0.09,
+        2.83
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.51,
+          0.09,
+          2.83
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.92
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.92
+        ]
+      },
+      "ai_any_count": 1,
+      "ai_counts": {
+        "claude": 1,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.45,
+        80.99,
+        83.83
+      ],
+      "dead_within_90d": [
+        88.11,
+        86.85,
+        89.26
+      ],
+      "fate": {
+        "dead_on_arrival": 58.3,
+        "died_within_30d": 24.15,
+        "died_within_90d": 5.66,
+        "lived_past_90d": 11.89
+      }
+    },
+    {
+      "bucket": "2023Q1",
+      "n": 3140,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 65.0,
+      "dead_on_arrival": [
+        57.96,
+        56.23,
+        59.68
+      ],
+      "zero_stars": [
+        89.33,
+        88.2,
+        90.36
+      ],
+      "zero_forks": [
+        96.34,
+        95.62,
+        96.94
+      ],
+      "archived": [
+        0.64,
+        0.41,
+        0.98
+      ],
+      "empty": [
+        13.92,
+        12.75,
+        15.17
+      ],
+      "ai_checked": 341,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.11
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.11
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.11
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        80.45,
+        79.02,
+        81.8
+      ],
+      "dead_within_90d": [
+        86.21,
+        84.96,
+        87.37
+      ],
+      "fate": {
+        "dead_on_arrival": 57.96,
+        "died_within_30d": 22.48,
+        "died_within_90d": 5.76,
+        "lived_past_90d": 13.79
+      }
+    },
+    {
+      "bucket": "2023Q2",
+      "n": 2809,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 61.0,
+      "dead_on_arrival": [
+        62.55,
+        60.74,
+        64.32
+      ],
+      "zero_stars": [
+        89.75,
+        88.57,
+        90.82
+      ],
+      "zero_forks": [
+        95.8,
+        94.99,
+        96.48
+      ],
+      "archived": [
+        0.64,
+        0.41,
+        1.01
+      ],
+      "empty": [
+        16.02,
+        14.71,
+        17.42
+      ],
+      "ai_checked": 262,
+      "ai_config": [
+        0.38,
+        0.07,
+        2.13
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "copilot": [
+          0.38,
+          0.07,
+          2.13
+        ]
+      },
+      "ai_any_count": 1,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 1
+      },
+      "dead_within_30d": [
+        83.59,
+        82.17,
+        84.91
+      ],
+      "dead_within_90d": [
+        89.0,
+        87.79,
+        90.1
+      ],
+      "fate": {
+        "dead_on_arrival": 62.55,
+        "died_within_30d": 21.04,
+        "died_within_90d": 5.41,
+        "lived_past_90d": 11.0
+      }
+    },
+    {
+      "bucket": "2023Q3",
+      "n": 3022,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 66.0,
+      "dead_on_arrival": [
+        59.27,
+        57.5,
+        61.0
+      ],
+      "zero_stars": [
+        91.4,
+        90.34,
+        92.34
+      ],
+      "zero_forks": [
+        96.89,
+        96.21,
+        97.45
+      ],
+      "archived": [
+        0.66,
+        0.43,
+        1.02
+      ],
+      "empty": [
+        16.21,
+        14.94,
+        17.57
+      ],
+      "ai_checked": 209,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.8
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.8
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.8
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.63,
+        81.24,
+        83.94
+      ],
+      "dead_within_90d": [
+        87.66,
+        86.44,
+        88.78
+      ],
+      "fate": {
+        "dead_on_arrival": 59.27,
+        "died_within_30d": 23.36,
+        "died_within_90d": 5.03,
+        "lived_past_90d": 12.34
+      }
+    },
+    {
+      "bucket": "2023Q4",
+      "n": 3286,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 35.0,
+      "dead_on_arrival": [
+        61.2,
+        59.52,
+        62.85
+      ],
+      "zero_stars": [
+        91.72,
+        90.73,
+        92.62
+      ],
+      "zero_forks": [
+        96.96,
+        96.31,
+        97.49
+      ],
+      "archived": [
+        3.01,
+        2.48,
+        3.65
+      ],
+      "empty": [
+        17.99,
+        16.71,
+        19.34
+      ],
+      "ai_checked": 383,
+      "ai_config": [
+        0.0,
+        0.0,
+        0.99
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          0.99
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          0.99
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.96,
+        81.63,
+        84.2
+      ],
+      "dead_within_90d": [
+        88.86,
+        87.74,
+        89.89
+      ],
+      "fate": {
+        "dead_on_arrival": 61.2,
+        "died_within_30d": 21.76,
+        "died_within_90d": 5.9,
+        "lived_past_90d": 11.14
+      }
+    },
+    {
+      "bucket": "2024Q1",
+      "n": 3085,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 61.0,
+      "dead_on_arrival": [
+        59.06,
+        57.31,
+        60.78
+      ],
+      "zero_stars": [
+        91.12,
+        90.06,
+        92.07
+      ],
+      "zero_forks": [
+        96.76,
+        96.07,
+        97.33
+      ],
+      "archived": [
+        0.36,
+        0.2,
+        0.64
+      ],
+      "empty": [
+        14.94,
+        13.73,
+        16.24
+      ],
+      "ai_checked": 297,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.28
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.28
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        81.78,
+        80.38,
+        83.11
+      ],
+      "dead_within_90d": [
+        88.17,
+        86.98,
+        89.26
+      ],
+      "fate": {
+        "dead_on_arrival": 59.06,
+        "died_within_30d": 22.72,
+        "died_within_90d": 6.39,
+        "lived_past_90d": 11.83
+      }
+    },
+    {
+      "bucket": "2024Q2",
+      "n": 2965,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 59.0,
+      "dead_on_arrival": [
+        62.16,
+        60.4,
+        63.89
+      ],
+      "zero_stars": [
+        92.07,
+        91.05,
+        92.99
+      ],
+      "zero_forks": [
+        97.57,
+        96.95,
+        98.07
+      ],
+      "archived": [
+        0.78,
+        0.52,
+        1.16
+      ],
+      "empty": [
+        15.62,
+        14.35,
+        16.97
+      ],
+      "ai_checked": 303,
+      "ai_config": [
+        0.33,
+        0.06,
+        1.85
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.33,
+          0.06,
+          1.85
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.25
+        ]
+      },
+      "ai_any_count": 1,
+      "ai_counts": {
+        "claude": 1,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.8,
+        81.4,
+        84.12
+      ],
+      "dead_within_90d": [
+        89.17,
+        88.0,
+        90.24
+      ],
+      "fate": {
+        "dead_on_arrival": 62.16,
+        "died_within_30d": 20.64,
+        "died_within_90d": 6.37,
+        "lived_past_90d": 10.83
+      }
+    },
+    {
+      "bucket": "2024Q3",
+      "n": 2721,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 48.0,
+      "dead_on_arrival": [
+        61.93,
+        60.09,
+        63.73
+      ],
+      "zero_stars": [
+        91.99,
+        90.91,
+        92.95
+      ],
+      "zero_forks": [
+        96.29,
+        95.51,
+        96.94
+      ],
+      "archived": [
+        0.33,
+        0.17,
+        0.63
+      ],
+      "empty": [
+        15.1,
+        13.81,
+        16.5
+      ],
+      "ai_checked": 206,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.83
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.83
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.83
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        83.35,
+        81.91,
+        84.7
+      ],
+      "dead_within_90d": [
+        89.56,
+        88.36,
+        90.66
+      ],
+      "fate": {
+        "dead_on_arrival": 61.93,
+        "died_within_30d": 21.43,
+        "died_within_90d": 6.21,
+        "lived_past_90d": 10.44
+      }
+    },
+    {
+      "bucket": "2024Q4",
+      "n": 2857,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 53.0,
+      "dead_on_arrival": [
+        61.6,
+        59.81,
+        63.37
+      ],
+      "zero_stars": [
+        93.21,
+        92.23,
+        94.08
+      ],
+      "zero_forks": [
+        97.09,
+        96.41,
+        97.65
+      ],
+      "archived": [
+        0.28,
+        0.14,
+        0.55
+      ],
+      "empty": [
+        13.55,
+        12.34,
+        14.85
+      ],
+      "ai_checked": 273,
+      "ai_config": [
+        0.0,
+        0.0,
+        1.39
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.39
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.39
+        ]
+      },
+      "ai_any_count": 0,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 0,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.67,
+        81.24,
+        84.02
+      ],
+      "dead_within_90d": [
+        89.43,
+        88.25,
+        90.5
+      ],
+      "fate": {
+        "dead_on_arrival": 61.6,
+        "died_within_30d": 21.07,
+        "died_within_90d": 6.76,
+        "lived_past_90d": 10.57
+      }
+    },
+    {
+      "bucket": "2025Q1",
+      "n": 3144,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 41.0,
+      "dead_on_arrival": [
+        59.45,
+        57.72,
+        61.15
+      ],
+      "zero_stars": [
+        92.88,
+        91.92,
+        93.72
+      ],
+      "zero_forks": [
+        97.04,
+        96.39,
+        97.58
+      ],
+      "archived": [
+        0.51,
+        0.31,
+        0.83
+      ],
+      "empty": [
+        13.84,
+        12.67,
+        15.09
+      ],
+      "ai_checked": 361,
+      "ai_config": [
+        0.55,
+        0.15,
+        2.0
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.0,
+          0.0,
+          1.05
+        ],
+        "agents": [
+          0.28,
+          0.05,
+          1.55
+        ],
+        "cursor": [
+          0.28,
+          0.05,
+          1.55
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.05
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.05
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.05
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.05
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.05
+        ]
+      },
+      "ai_any_count": 2,
+      "ai_counts": {
+        "claude": 0,
+        "agents": 1,
+        "cursor": 1,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        82.54,
+        81.17,
+        83.83
+      ],
+      "dead_within_90d": [
+        88.33,
+        87.16,
+        89.4
+      ],
+      "fate": {
+        "dead_on_arrival": 59.45,
+        "died_within_30d": 23.09,
+        "died_within_90d": 5.79,
+        "lived_past_90d": 11.67
+      }
+    },
+    {
+      "bucket": "2025Q2",
+      "n": 2845,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 44.0,
+      "dead_on_arrival": [
+        63.23,
+        61.45,
+        64.99
+      ],
+      "zero_stars": [
+        93.95,
+        93.02,
+        94.77
+      ],
+      "zero_forks": [
+        97.29,
+        96.63,
+        97.83
+      ],
+      "archived": [
+        0.18,
+        0.08,
+        0.41
+      ],
+      "empty": [
+        14.02,
+        12.8,
+        15.35
+      ],
+      "ai_checked": 224,
+      "ai_config": [
+        0.89,
+        0.25,
+        3.2
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.45,
+          0.08,
+          2.49
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.69
+        ],
+        "cursor": [
+          0.45,
+          0.08,
+          2.49
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.69
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.69
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.69
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.69
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          1.69
+        ]
+      },
+      "ai_any_count": 2,
+      "ai_counts": {
+        "claude": 1,
+        "agents": 0,
+        "cursor": 1,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        84.53,
+        83.16,
+        85.82
+      ],
+      "dead_within_90d": [
+        90.86,
+        89.75,
+        91.87
+      ],
+      "fate": {
+        "dead_on_arrival": 63.23,
+        "died_within_30d": 21.3,
+        "died_within_90d": 6.33,
+        "lived_past_90d": 9.14
+      }
+    },
+    {
+      "bucket": "2025Q3",
+      "n": 3192,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 53.0,
+      "dead_on_arrival": [
+        62.94,
+        61.25,
+        64.6
+      ],
+      "zero_stars": [
+        93.39,
+        92.47,
+        94.2
+      ],
+      "zero_forks": [
+        97.34,
+        96.72,
+        97.84
+      ],
+      "archived": [
+        0.31,
+        0.17,
+        0.58
+      ],
+      "empty": [
+        13.53,
+        12.39,
+        14.76
+      ],
+      "ai_checked": 399,
+      "ai_config": [
+        0.75,
+        0.26,
+        2.19
+      ],
+      "ai_by_tool": {
+        "claude": [
+          0.5,
+          0.14,
+          1.81
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          0.95
+        ],
+        "cursor": [
+          0.25,
+          0.04,
+          1.41
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          0.95
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          0.95
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          0.95
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          0.95
+        ],
+        "copilot": [
+          0.0,
+          0.0,
+          0.95
+        ]
+      },
+      "ai_any_count": 3,
+      "ai_counts": {
+        "claude": 2,
+        "agents": 0,
+        "cursor": 1,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 0
+      },
+      "dead_within_30d": [
+        85.49,
+        84.23,
+        86.67
+      ],
+      "dead_within_90d": [
+        91.23,
+        90.2,
+        92.16
+      ],
+      "fate": {
+        "dead_on_arrival": 62.94,
+        "died_within_30d": 22.56,
+        "died_within_90d": 5.73,
+        "lived_past_90d": 8.77
+      }
+    },
+    {
+      "bucket": "2025Q4",
+      "n": 3257,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 53.0,
+      "dead_on_arrival": [
+        63.37,
+        61.7,
+        65.01
+      ],
+      "zero_stars": [
+        93.92,
+        93.05,
+        94.69
+      ],
+      "zero_forks": [
+        97.79,
+        97.23,
+        98.24
+      ],
+      "archived": [
+        0.28,
+        0.15,
+        0.52
+      ],
+      "empty": [
+        13.36,
+        12.23,
+        14.57
+      ],
+      "ai_checked": 247,
+      "ai_config": [
+        2.02,
+        0.87,
+        4.65
+      ],
+      "ai_by_tool": {
+        "claude": [
+          1.21,
+          0.41,
+          3.51
+        ],
+        "agents": [
+          0.0,
+          0.0,
+          1.53
+        ],
+        "cursor": [
+          0.4,
+          0.07,
+          2.26
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.53
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.53
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          1.53
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.53
+        ],
+        "copilot": [
+          0.4,
+          0.07,
+          2.26
+        ]
+      },
+      "ai_any_count": 5,
+      "ai_counts": {
+        "claude": 3,
+        "agents": 0,
+        "cursor": 1,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 1
+      },
+      "dead_within_30d": [
+        85.42,
+        84.16,
+        86.59
+      ],
+      "dead_within_90d": [
+        91.86,
+        90.87,
+        92.75
+      ],
+      "fate": {
+        "dead_on_arrival": 63.37,
+        "died_within_30d": 22.04,
+        "died_within_90d": 6.45,
+        "lived_past_90d": 8.14
+      }
+    },
+    {
+      "bucket": "2026Q1",
+      "n": 2912,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.03,
+      "median_disk_kb": 47.0,
+      "dead_on_arrival": [
+        63.19,
+        61.42,
+        64.92
+      ],
+      "zero_stars": [
+        93.27,
+        92.3,
+        94.12
+      ],
+      "zero_forks": [
+        97.46,
+        96.82,
+        97.97
+      ],
+      "archived": [
+        0.45,
+        0.26,
+        0.76
+      ],
+      "empty": [
+        13.5,
+        12.3,
+        14.79
+      ],
+      "ai_checked": 297,
+      "ai_config": [
+        4.71,
+        2.83,
+        7.76
+      ],
+      "ai_by_tool": {
+        "claude": [
+          2.36,
+          1.15,
+          4.78
+        ],
+        "agents": [
+          2.36,
+          1.15,
+          4.78
+        ],
+        "cursor": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "gemini": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "cline": [
+          0.34,
+          0.06,
+          1.88
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          1.28
+        ],
+        "copilot": [
+          0.67,
+          0.18,
+          2.42
+        ]
+      },
+      "ai_any_count": 14,
+      "ai_counts": {
+        "claude": 7,
+        "agents": 7,
+        "cursor": 0,
+        "gemini": 0,
+        "windsurf": 0,
+        "cline": 1,
+        "aider": 0,
+        "copilot": 2
+      },
+      "dead_within_30d": [
+        84.82,
+        83.47,
+        86.08
+      ],
+      "dead_within_90d": [
+        92.24,
+        91.21,
+        93.16
+      ],
+      "fate": {
+        "dead_on_arrival": 63.19,
+        "died_within_30d": 21.63,
+        "died_within_90d": 7.42,
+        "lived_past_90d": 7.76
+      }
+    },
+    {
+      "bucket": "2026Q2",
+      "n": 2410,
+      "excluded_too_young": 0,
+      "median_lifespan_days": 0.02,
+      "median_disk_kb": 60.0,
+      "dead_on_arrival": [
+        63.82,
+        61.88,
+        65.71
+      ],
+      "zero_stars": [
+        93.53,
+        92.47,
+        94.44
+      ],
+      "zero_forks": [
+        98.26,
+        97.65,
+        98.71
+      ],
+      "archived": [
+        0.08,
+        0.02,
+        0.3
+      ],
+      "empty": [
+        11.29,
+        10.08,
+        12.61
+      ],
+      "ai_checked": 732,
+      "ai_config": [
+        3.69,
+        2.55,
+        5.31
+      ],
+      "ai_by_tool": {
+        "claude": [
+          2.73,
+          1.78,
+          4.18
+        ],
+        "agents": [
+          1.64,
+          0.94,
+          2.84
+        ],
+        "cursor": [
+          0.27,
+          0.07,
+          0.99
+        ],
+        "gemini": [
+          0.27,
+          0.07,
+          0.99
+        ],
+        "windsurf": [
+          0.0,
+          0.0,
+          0.52
+        ],
+        "cline": [
+          0.0,
+          0.0,
+          0.52
+        ],
+        "aider": [
+          0.0,
+          0.0,
+          0.52
+        ],
+        "copilot": [
+          0.41,
+          0.14,
+          1.2
+        ]
+      },
+      "ai_any_count": 27,
+      "ai_counts": {
+        "claude": 20,
+        "agents": 12,
+        "cursor": 2,
+        "gemini": 2,
+        "windsurf": 0,
+        "cline": 0,
+        "aider": 0,
+        "copilot": 3
+      },
+      "dead_within_30d": [
+        88.59,
+        87.26,
+        89.8
+      ]
+    },
+    {
+      "bucket": "2026Q3",
+      "n": 1174,
+      "excluded_too_young": 1343,
+      "median_lifespan_days": 0.01,
+      "median_disk_kb": 48.5,
+      "dead_on_arrival": [
+        65.5,
+        62.74,
+        68.17
+      ],
+      "zero_stars": [
+        95.32,
+        93.95,
+        96.38
+      ],
+      "zero_forks": [
+        98.81,
+        98.01,
+        99.29
+      ],
+      "archived": [
+        0.0,
+        0.0,
+        0.33
+      ],
+      "empty": [
+        14.48,
+        12.58,
+        16.61
+      ],
+      "ai_checked": 431,
+      "ai_config": [
+        7.66,
+        5.5,
+        10.56
+      ],
+      "ai_by_tool": {
+        "claude": [
+          6.03,
+          4.15,
+          8.69
+        ],
+        "agents": [
+          5.57,
+          3.77,
+          8.15
+        ],
+        "cursor": [
+          0.93,
+          0.36,
+          2.36
+        ],
+        "gemini": [
+          0.23,
+          0.04,
+          1.3
+        ],
+        "windsurf": [
+          0.23,
+          0.04,
+          1.3
+        ],
+        "cline": [
+          0.23,
+          0.04,
+          1.3
+        ],
+        "aider": [
+          0.23,
+          0.04,
+          1.3
+        ],
+        "copilot": [
+          0.46,
+          0.13,
+          1.68
+        ]
+      },
+      "ai_any_count": 33,
+      "ai_counts": {
+        "claude": 26,
+        "agents": 24,
+        "cursor": 4,
+        "gemini": 1,
+        "windsurf": 1,
+        "cline": 1,
+        "aider": 1,
+        "copilot": 2
+      }
+    }
+  ]
+}
