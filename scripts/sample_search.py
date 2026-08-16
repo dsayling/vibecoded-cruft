@@ -45,12 +45,20 @@ def to_row(item: dict) -> dict:
         "nameWithOwner": item.get("full_name"),
         "createdAt": item.get("created_at"),
         "pushedAt": item.get("pushed_at"),
+        # Every metric here compares a stored timestamp against a clock. Without knowing
+        # *when* the row was read, `pushedAt` silently ages: a repo captured three days
+        # after creation still passes a 30-day age gate months later, on three-day-old
+        # evidence, which is exactly what that gate exists to prevent.
+        "observed_at": iso(dt.datetime.now(dt.timezone.utc)),
         "stargazerCount": item.get("stargazers_count", 0),
         "forkCount": item.get("forks_count", 0),
         "isArchived": bool(item.get("archived")),
         "isFork": bool(item.get("fork")),
-        # Search exposes no "empty" flag; a zero-byte repo is the same thing.
-        "isEmpty": (item.get("size") or 0) == 0,
+        # Search exposes no "empty" flag, and `size` is rounded to KB — a repo holding a
+        # 300-byte README reports 0 and is not empty. Deriving isEmpty from it would feed
+        # the aggregator two different definitions of the same field depending on which
+        # collector reached the quarter first. None means "not measured".
+        "isEmpty": None,
         "diskUsage": item.get("size") or 0,
         "lang": item.get("language"),
         # Search cannot see file listings, so AI config detection needs the separate

@@ -25,7 +25,9 @@
     <h2>Commits that admit a robot wrote them</h2>
     <p class="lede">
       Commits whose message carries an AI tool's attribution trailer. This is a
-      <em>floor</em>, not a total &mdash; it counts only the ones that owned up.
+      <em>floor</em>, not a total &mdash; it counts only the ones that owned up. Each
+      line has its name-collision baseline subtracted, measured over the months before
+      that tool existed, when every hit was a human with the same name.
     </p>
     <div class="chart" id="chart-markers"></div>
     <div class="legend" id="legend-markers"></div>
@@ -45,19 +47,28 @@
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Dead on arrival</h2>
-      <p class="lede">Created and never pushed to again after day one.</p>
+      <h2>How fast they die</h2>
+      <p class="lede">
+        Three fixed windows, asked of every cohort alike: never pushed again after day
+        one, dead inside 30 days, dead inside 90.
+      </p>
       <div class="chart" id="chart-doa"></div>
-      <p class="note">Shaded band is the 95% Wilson interval on the sample.</p>
+      <div class="legend" id="legend-doa"></div>
+      <p class="note">
+        These three are the only series on the page that compare honestly across
+        quarters, because each one asks the same question of every cohort regardless of
+        how long ago it was born. Shaded band is the 95% Wilson interval.
+      </p>
     </div>
     <div class="panel">
       <h2>Nobody starred it</h2>
       <p class="lede">Repos sitting at exactly zero stars today.</p>
       <div class="chart" id="chart-stars"></div>
       <p class="note">
-        <strong>Not a trend line.</strong> A 2020 repo has had six years to collect a star
-        and a repo from this quarter has had weeks, so the slope here is mostly exposure
-        time, not a change in behaviour. Read each quarter on its own.
+        Drawn as dots rather than a line, deliberately. A 2020 repo has had six years to
+        collect a star and a repo from this quarter has had weeks, so a slope here would
+        be mostly exposure time. Each dot is one quarter's present state; the whisker is
+        its 95% interval.
       </p>
     </div>
   </section>
@@ -80,16 +91,41 @@
       </p>
     </div>
     <div class="panel">
-      <h2>Median lifespan</h2>
-      <p class="lede">Time between a repo's creation and its final push.</p>
+      <h2>How long they last</h2>
+      <p class="lede">
+        Time between a repo's creation and its final push, at the 75th percentile &mdash;
+        the point three-quarters of a cohort has already reached its last commit.
+      </p>
       <div class="chart" id="chart-lifespan"></div>
       <p class="note" id="note-lifespan"></p>
       <p class="note">
-        <strong>Also not a trend line</strong>, and for the same reason: a repo cannot
-        outlive its own age, so recent quarters are capped by the calendar rather than by
-        anyone losing interest.
+        Read each quarter on its own: a repo cannot outlive its own age, so recent
+        cohorts are capped by the calendar rather than by anyone losing interest.
       </p>
     </div>
+  </section>
+
+  <section class="panel" id="panel-langs">
+    <h2>What the cruft is written in</h2>
+    <p class="lede">
+      Dead-on-arrival rate by the repo's primary language, newest cohorts only. This is
+      a fixed one-day window measured the same way for every group, so unlike stars it
+      is a fair comparison between them.
+    </p>
+    <div class="chart" id="chart-langs"></div>
+    <p class="note" id="note-langs"></p>
+  </section>
+
+  <section class="panel" id="panel-other">
+    <h2>Other signs of nothing</h2>
+    <p class="lede">
+      Three more things the collector has always measured: repos nobody forked, repos
+      whose owner formally gave up and archived them, and repos that never received a
+      single commit.
+    </p>
+    <div class="chart" id="chart-other"></div>
+    <div class="legend" id="legend-other"></div>
+    <p class="note" id="note-other"></p>
   </section>
 
   <section class="panel" id="panel-compare">
@@ -162,23 +198,39 @@
         markers it does &mdash; aider agrees to within 1%. For the largest it does not: Claude
         comes out 2.97&times; higher counted monthly than annually. Whatever GitHub does to
         estimate these totals degrades as the result set grows, which means the biggest figures
-        on this page are the least trustworthy ones. Monthly counts are used throughout, being
-        the narrower and better-behaved query.
+        on this page are the least trustworthy ones. Across all six tools the two methods land
+        2.5&times; apart, which is why the headline is shown as a range instead of a number:
+        picking one end would be picking an answer.
       </li>
       <li>
         <strong>Tools change their commit trailers, and a narrow query stops matching.</strong>
         Searching <code>"Generated with Claude Code"</code> in April 2026 finds 87,421 commits;
         <code>"Co-Authored-By: Claude"</code> finds 11.2 million in the same month, because the
         first line was dropped from the default output. Every marker here is therefore the
-        broad trailer, which lets in a small floor of commits from humans named Claude, Cursor
-        or Devin &mdash; a few thousand a year, visible in the per-year totals. That floor is a
-        far smaller lie than a missing order of magnitude.
+        broad trailer, which lets in commits from humans named Claude, Cursor or Devin. That
+        floor is a far smaller lie than a missing order of magnitude &mdash; and unlike a
+        missing order of magnitude, it can be measured and removed.
+      </li>
+      <li>
+        <strong>The name-collision floor is real, and bigger than it sounds.</strong> Before
+        Devin existed, <code>"Co-authored-by: Devin"</code> was already returning a median of
+        389 hits a month, every one of them a person. Claude ran 116, Cursor 98. Each series
+        here has its own floor subtracted, measured as the median monthly count over the three
+        years before that tool shipped. Uncorrected, the chart showed hundreds of AI commits a
+        month in 2022.
       </li>
       <li>
         <strong>Commit dates can be forged.</strong> Committer dates are self-reported, so
         rebases and history rewrites scatter a few commits into years before the tool that
-        allegedly wrote them existed. Years with fewer than a dozen hits are treated as zero
-        rather than charted as adoption.
+        allegedly wrote them existed. This is a second, smaller reason the early years cannot
+        be read as adoption.
+      </li>
+      <li>
+        <strong>The repo numbers have a shelf life.</strong> Every cohort metric compares a
+        stored <code>pushedAt</code> against a clock, so a cached row decays: a repo revived
+        after it was sampled stays counted as dead. Rows carry the time they were read, the
+        30-day age floor is applied against that time rather than against today, and the
+        median age of the underlying observations is printed with the sample size below.
       </li>
       <li>
         <strong>"Dead on arrival" undercounts.</strong> <code>pushedAt</code> moves for some

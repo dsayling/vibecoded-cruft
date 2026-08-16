@@ -151,6 +151,12 @@ body {
 
 .tooltip .k i { width: 8px; height: 8px; border-radius: 2px; flex: none; }
 
+/* Sample size sits with the label, never competing with the value. */
+.tooltip .when .n { display: block; margin-top: 2px; letter-spacing: 0; }
+
+/* Intervals and spreads: present, subordinate to the point estimate. */
+.tooltip .spread { color: var(--ink-faint); font-weight: 400; }
+
 .tooltip b {
   float: right;
   color: var(--ink);
@@ -177,9 +183,101 @@ body {
 .legend .key { display: inline-flex; align-items: center; gap: 7px; }
 .legend .swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
 
+/* --- the numbers behind the picture --- */
+
+.datatable {
+  margin-top: 16px;
+  border-top: 1px solid var(--panel-edge);
+  padding-top: 12px;
+}
+
+.datatable > summary {
+  cursor: pointer;
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+  list-style: none;
+}
+
+.datatable > summary::-webkit-details-marker { display: none; }
+.datatable > summary::before { content: '▸ '; color: var(--ink-faint); }
+.datatable[open] > summary::before { content: '▾ '; }
+.datatable > summary:hover { color: var(--ink); }
+.datatable > summary:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
+
+.dt-actions { margin: 12px 0 8px; }
+
+.dt-actions button {
+  background: #1c1f26;
+  color: var(--ink-dim);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.dt-actions button:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+.dt-fallback {
+  width: 100%;
+  min-height: 120px;
+  margin-bottom: 10px;
+  background: #0d0f13;
+  color: var(--ink-dim);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  padding: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+/* Wide tables scroll inside the panel rather than pushing the page sideways. */
+.dt-scroll { overflow-x: auto; max-height: 380px; overflow-y: auto; }
+
+.dt-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dt-scroll caption {
+  caption-side: top;
+  text-align: left;
+  color: var(--ink-faint);
+  font-family: inherit;
+  font-size: 0.76rem;
+  padding-bottom: 8px;
+}
+
+.dt-scroll th,
+.dt-scroll td {
+  padding: 5px 10px 5px 0;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--panel-edge);
+}
+
+.dt-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+}
+
+.dt-scroll tbody th,
+.dt-scroll thead th:first-child { text-align: left; color: var(--ink); font-weight: 600; }
+.dt-scroll td { color: var(--ink-dim); }
+
 /* --- methodology --- */
 
 .queries { margin: 10px 0 0; padding: 0; list-style: none; }
+
+.queries .floor { color: var(--warn); }
 
 .queries li {
   font-family: var(--mono);

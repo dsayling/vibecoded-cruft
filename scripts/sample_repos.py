@@ -35,12 +35,19 @@ from lib import (  # noqa: E402
     load_raw,
     log,
     median,
+    percentile,
     wilson,
     write_json,
 )
 
 PAGE = 100
 NOW = dt.datetime.now(dt.timezone.utc)
+
+# How many of the newest quarters feed the by-language breakdown. Language is a present-
+# state attribute like stars, so pooling twenty quarters of it would mostly describe how
+# GitHub's language mix has drifted since 2020.
+LANG_QUARTERS = 4
+LANG_MIN_N = 50
 
 # Every repo gets this long to show a second sign of life before it counts as dead.
 # Without it the newest cohort is scored on repos that are only days old and have not
@@ -57,6 +64,17 @@ def parse_ts(value: str | None) -> dt.datetime | None:
         return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError:
         return None
+
+
+def as_of(row: dict) -> dt.datetime:
+    """When this row's `pushedAt` was actually true.
+
+    Raw rows are cached indefinitely and reused across runs, so comparing a frozen
+    `pushedAt` against a live clock quietly breaks every age-gated metric. Rows written
+    before `observed_at` existed fall back to now, which is the old (wrong) behaviour —
+    but only for them, and `stale_days` on the cohort makes it visible.
+    """
+    return parse_ts(row.get("observed_at")) or NOW
 
 
 def quarter_of(when: dt.datetime) -> str:
@@ -86,6 +104,8 @@ def compact(row: dict, trees: bool) -> dict:
         "nameWithOwner": row.get("nameWithOwner"),
         "createdAt": row.get("createdAt"),
         "pushedAt": row.get("pushedAt"),
+        # See as_of(): without this the 30-day age gate is defeated by its own cache.
+        "observed_at": NOW.isoformat(),
         "stargazerCount": row.get("stargazerCount", 0),
         "forkCount": row.get("forkCount", 0),
         "isArchived": bool(row.get("isArchived")),
@@ -98,14 +118,27 @@ def compact(row: dict, trees: bool) -> dict:
 
 
 async def collect_bucket(
-    gh: GitHub, bucket: dict, target: int, batch: int, trees: bool
+    gh: GitHub, bucket: dict, target: int, batch: int, trees: bool, refresh_stale: int = 0
 ) -> tuple[int, int]:
     """Fetch and enrich `target` repos spread across one quarter. Returns (kept, missing)."""
     name = bucket["bucket"]
     existing = load_raw(name)
+
+    def fresh(r: dict) -> bool:
+        """Is this row recent enough to trust without re-reading it?"""
+        if not refresh_stale:
+            return True
+        return (NOW - as_of(r)).days < refresh_stale
+
+    if refresh_stale:
+        stale_rows = sum(1 for r in existing if not fresh(r))
+        if stale_rows:
+            log(f"{name}: {stale_rows} rows older than {refresh_stale}d, re-reading")
     # In a trees pass, rows collected by an earlier metadata-only pass do not count
     # toward the target — they have no AI data to contribute.
-    have = sum(1 for r in existing if r.get("ai") is not None) if trees else len(existing)
+    have = sum(
+        1 for r in existing if fresh(r) and (r.get("ai") is not None if trees else True)
+    )
     if have >= target:
         log(f"{name}: {have} rows cached, skipping")
         return have, 0
@@ -133,7 +166,7 @@ async def collect_bucket(
         done = {
             r.get("nameWithOwner")
             for r in existing
-            if not trees or r.get("ai") is not None
+            if fresh(r) and (r.get("ai") is not None if trees else True)
         }
         names = [n for n in names if n not in done]
         if not names:
@@ -153,7 +186,10 @@ def summarise(rows: list[dict], bucket: str) -> dict | None:
     live = []
     for r in candidates:
         created = parse_ts(r.get("createdAt"))
-        if created and (NOW - created).days >= MIN_AGE_DAYS:
+        # Gate on how old the repo was *when we looked*, not on how old it is now.
+        # Using NOW here lets a row captured days after creation clear a 30-day floor
+        # months later, which reinstates precisely the bias the floor was added to remove.
+        if created and (as_of(r) - created).days >= MIN_AGE_DAYS:
             live.append(r)
     n = len(live)
     if n < 30:
@@ -163,7 +199,8 @@ def summarise(rows: list[dict], bucket: str) -> dict | None:
     age_days = (NOW - ended).days
 
     lifespans: list[float] = []
-    doa = d30 = d90 = alive90 = zero_star = zero_fork = archived = empty = 0
+    doa = d30 = d90 = alive90 = zero_star = zero_fork = archived = 0
+    empty = empty_checked = 0
     ai_any = ai_checked = 0
     ai_by_tool = dict.fromkeys(AI_CONFIG_KEYS, 0)
 
@@ -175,8 +212,12 @@ def summarise(rows: list[dict], bucket: str) -> dict | None:
             zero_fork += 1
         if r.get("isArchived"):
             archived += 1
-        if r.get("isEmpty"):
-            empty += 1
+        # Only GraphQL rows carry a real "no commits" flag; search rows say None.
+        # Counting those as not-empty would understate it by the search sample's size.
+        if r.get("isEmpty") is not None:
+            empty_checked += 1
+            if r["isEmpty"]:
+                empty += 1
         if r.get("ai") is not None:
             ai_checked += 1
             hits = r["ai"]
@@ -198,18 +239,30 @@ def summarise(rows: list[dict], bucket: str) -> dict | None:
         else:
             alive90 += 1
 
+    stale = [round((NOW - as_of(r)).total_seconds() / 86400, 1) for r in live]
     out = {
         "bucket": bucket,
         "n": n,
         "excluded_too_young": len(candidates) - n,
+        # The median is pinned inside day one for every quarter — more than half of each
+        # cohort dies on the day it is born, so it reports the floor and nothing else.
+        # The upper percentiles sit above that mass and are the ones worth plotting.
         "median_lifespan_days": round(median(lifespans), 2),
+        "lifespan_p75_days": round(percentile(lifespans, 0.75), 2),
+        "lifespan_p90_days": round(percentile(lifespans, 0.90), 2),
         "median_disk_kb": round(median([r.get("diskUsage") or 0 for r in live]), 1),
         "dead_on_arrival": wilson(doa, n),
         "zero_stars": wilson(zero_star, n),
         "zero_forks": wilson(zero_fork, n),
         "archived": wilson(archived, n),
-        "empty": wilson(empty, n),
+        # How old the underlying observations are. Everything above compares a stored
+        # timestamp against a clock, so this is the honest expiry date on the row.
+        "stale_days_median": round(median(stale), 1),
+        "stale_days_max": round(max(stale), 1) if stale else 0.0,
     }
+    if empty_checked >= 30:
+        out["empty"] = wilson(empty, empty_checked)
+        out["empty_checked"] = empty_checked
 
     # AI detection runs on its own smaller pass, so its denominator is the number of
     # repos actually checked, not the whole cohort.
@@ -257,6 +310,15 @@ async def main() -> None:
         "mode that survives a long run; do a second smaller pass without it for AI data.",
     )
     ap.add_argument(
+        "--refresh-stale",
+        type=int,
+        default=0,
+        metavar="DAYS",
+        help="re-read rows observed more than DAYS ago instead of trusting the cache. "
+        "Every metric here compares a stored pushedAt against a clock, so cached rows "
+        "decay: repos revived since collection stay counted as dead. 0 disables.",
+    )
+    ap.add_argument(
         "--batch",
         type=int,
         default=50,
@@ -285,7 +347,9 @@ async def main() -> None:
             )
             for i, b in enumerate(buckets):
                 _, missing = await collect_bucket(
-                    gh, b, args.n, args.batch, trees=not args.no_trees
+                    gh, b, args.n, args.batch,
+                    trees=not args.no_trees,
+                    refresh_stale=args.refresh_stale,
                 )
                 total_missing += missing
                 # Secondary limits key on sustained bursts, not on the hourly budget:
@@ -307,6 +371,9 @@ async def main() -> None:
     # Interrupted runs append, adjacent probes overlap, and a trees pass revisits repos
     # the metadata pass already saw — so the raw files legitimately contain duplicates.
     # Keep one row per repo, preferring whichever version carries AI data.
+    # Merge rather than pick: take the freshest observation for the perishable fields and
+    # carry `ai` across from whichever row has it. Preferring the AI-carrying row outright
+    # would keep its stale `pushedAt` too, aging the metric that matters most.
     best: dict[str, dict] = {}
     for b in all_buckets:
         for row in load_raw(b["bucket"]):
@@ -314,8 +381,20 @@ async def main() -> None:
             if not key:
                 continue
             prior = best.get(key)
-            if prior is None or (prior.get("ai") is None and row.get("ai") is not None):
+            if prior is None:
                 best[key] = row
+                continue
+            newer, older = (
+                (row, prior)
+                if (row.get("observed_at") or "") > (prior.get("observed_at") or "")
+                else (prior, row)
+            )
+            merged = dict(newer)
+            if merged.get("ai") is None and older.get("ai") is not None:
+                merged["ai"] = older["ai"]
+            if merged.get("isEmpty") is None and older.get("isEmpty") is not None:
+                merged["isEmpty"] = older["isEmpty"]
+            best[key] = merged
 
     by_quarter: dict[str, list[dict]] = defaultdict(list)
     for row in best.values():
@@ -338,7 +417,7 @@ async def main() -> None:
         if r.get("isFork") or r.get("ai") is None or not r.get("pushedAt"):
             return False
         created = parse_ts(r.get("createdAt"))
-        return bool(created and (NOW - created).days >= MIN_AGE_DAYS)
+        return bool(created and (as_of(r) - created).days >= MIN_AGE_DAYS)
 
     def is_dead(r: dict) -> bool:
         return r["createdAt"][:10] == r["pushedAt"][:10]
@@ -378,6 +457,39 @@ async def main() -> None:
         ),
         "per_quarter": per_quarter,
     }
+    # Both collectors have always recorded `lang` and the aggregator has always thrown it
+    # away. Dead-on-arrival is a fixed-window metric, so splitting it by language is a
+    # fair comparison and costs nothing — the rows are already on disk.
+    lang_quarters = sorted(by_quarter)[-LANG_QUARTERS:]
+    by_lang: dict[str, list[dict]] = defaultdict(list)
+    for q in lang_quarters:
+        for r in by_quarter[q]:
+            created = parse_ts(r.get("createdAt"))
+            if r.get("isFork") or not r.get("pushedAt") or not created:
+                continue
+            if (as_of(r) - created).days < MIN_AGE_DAYS:
+                continue
+            by_lang[r.get("lang") or "(none detected)"].append(r)
+
+    lang_total = sum(len(v) for v in by_lang.values())
+    lang_rows = []
+    for name, group in sorted(by_lang.items(), key=lambda kv: -len(kv[1])):
+        if len(group) < LANG_MIN_N:
+            continue
+        dead = sum(1 for r in group if is_dead(r))
+        lang_rows.append(
+            {
+                "lang": name,
+                "n": len(group),
+                "share": round(100 * len(group) / lang_total, 2) if lang_total else 0.0,
+                "dead_on_arrival": wilson(dead, len(group)),
+                "zero_stars": wilson(
+                    sum(1 for r in group if r.get("stargazerCount", 0) == 0), len(group)
+                ),
+            }
+        )
+
+    stale_all = [round((NOW - as_of(r)).total_seconds() / 86400, 1) for r in best.values()]
     write_json(
         SITE_DATA / "cohorts.json",
         {
@@ -386,6 +498,21 @@ async def main() -> None:
             "total_repos": sum(c["n"] for c in cohorts),
             "vanished_between_calls": total_missing,
             "min_age_days": MIN_AGE_DAYS,
+            # generated_at says when the JSON was written, which is not when the repos
+            # were looked at. On a resumed collection those can be months apart.
+            "observation_age_days": {
+                "median": round(median(stale_all), 1),
+                "max": round(max(stale_all), 1) if stale_all else 0.0,
+                "rows_without_observed_at": sum(
+                    1 for r in best.values() if not r.get("observed_at")
+                ),
+            },
+            "languages": {
+                "quarters_used": lang_quarters,
+                "min_n": LANG_MIN_N,
+                "n_total": lang_total,
+                "rows": lang_rows,
+            },
             "ai_vs_rest": comparison,
             "cohorts": cohorts,
         },

@@ -29,7 +29,10 @@ Useful flags:
 uv run scripts/sample_repos.py --buckets 3 --n 500     # smoke test
 uv run scripts/sample_repos.py --aggregate-only        # rebuild JSON from cached raw data
 uv run scripts/sample_repos.py --batch 25              # gentler on secondary rate limits
+uv run scripts/sample_repos.py --refresh-stale 30      # re-read rows older than 30 days
 uv run scripts/ai_markers.py --months 2024-06,2025-06  # spot check
+uv run scripts/ai_markers.py --months 2026-06 --repeat 3   # sample a cell three times
+uv run scripts/ai_markers.py --rebuild                 # re-derive markers.json, no API calls
 ```
 
 ### Resuming a partial run
@@ -81,6 +84,29 @@ caret.
 
 Search is the scarcest budget, so the script queries each year first and only expands the
 months of years that returned a non-zero count.
+
+**The collision floor is measured, not waved at.** The broad trailers buy completeness at
+the cost of matching humans named Claude, Cursor and Devin, and that cost is larger than
+it sounds — before Devin existed, `"Co-authored-by: Devin"` already returned a median of
+389 hits a month:
+
+| tool | floor/month | measured over |
+|---|---|---|
+| Devin | 389 | 36 months to 2024-12 |
+| Claude | 116 | 37 months to 2025-01 |
+| Cursor | 98 | 36 months to 2024-12 |
+| Copilot, aider, Codex | 0 | — |
+
+`BASELINE_UNTIL` names the last month whose hits provably cannot be the tool; the floor is
+the median monthly count over that window, and it is subtracted from every month of that
+series. `NOISE_FLOOR` does not help with this and never did — it is annual and absolute,
+so Devin's 4,140 collisions in 2022 clear it 345× over. Its only job is skipping twelve
+searches on a genuinely empty year. Raw counts stay in `series`; corrected counts are in
+`series_adjusted`, so the correction is auditable rather than baked in.
+
+**One search is not a measurement.** `total_count` is an estimate that varies between
+identical queries, so `--repeat N` samples each cell N times, publishes the median, and
+records the observed min/max in `series_spread` for the site to draw.
 
 ### Repository cohorts — `scripts/sample_search.py` (primary)
 
@@ -161,6 +187,29 @@ roughly 20 requests with `--pause` between quarters.
 ## Reading the numbers
 
 - **Attribution measures disclosure, not use.** Every AI figure is a lower bound.
+- **The headline commit count is a range, not a number.** Counting the same commits by
+  month and by year gives 59.2M and 23.4M — 2.5× apart, and 86% of the gap is the Claude
+  series alone (2.97×). Both are published (`total_attributed_commits`,
+  `total_attributed_commits_annual`) and the site shows the range, because picking an end
+  would be picking an answer.
+- **Rows carry `observed_at`, and age gates use it.** Every cohort metric compares a
+  stored `pushedAt` against a clock, so cached rows decay. Gating on today's date instead
+  would let a row captured three days after a repo's birth clear the 30-day floor months
+  later on three-day-old evidence — reinstating exactly the bias `MIN_AGE_DAYS` exists to
+  remove. `--refresh-stale DAYS` re-reads rows past their shelf life; the median
+  observation age ships in `observation_age_days` and is printed on the page.
+- **`config_files` counts files, not repos.** Code search returns file matches, and repos
+  commonly carry several — 33 repos with any AI config in the 2026Q3 sample account for 50
+  `CLAUDE.md` + `AGENTS.md` hits. Summing those four numbers is not a repo count, and the
+  site no longer labels it as one. The measured union (`ai_any_count / ai_checked`) is the
+  figure with a real denominator.
+- **`isEmpty` comes from GraphQL only.** Search exposes no empty flag and its `size` is
+  rounded to whole KB, so deriving one from `size == 0` would call any repo with a short
+  README empty. Search rows record `null`, and `empty` is a proportion of `empty_checked`
+  rather than of the whole cohort.
+- **Lifespan is reported at p75 and p90.** The median is pinned inside day one for all 27
+  quarters, because more than half of every cohort dies on the day it is born — it
+  measures the floor, not the cohort.
 - **Committer dates are self-reported.** Rebases, imports and history rewrites put a
   handful of commits in years before the tool that "wrote" them existed — `"Generated with
   Claude Code"` returns exactly 1 hit for both 2022 and 2023. Years under `NOISE_FLOOR`
@@ -204,14 +253,22 @@ roughly 20 requests with `--pause` between quarters.
   against weeks for the newest one. Those two series describe present state per quarter and
   must not be read as trends.
 - Proportions carry 95% Wilson intervals — Wilson rather than normal because several of
-  these sit above 90%, where a normal interval runs past 100%.
+  these sit above 90%, where a normal interval runs past 100%. Every chart and counter on
+  the site shows its interval and its sample size, which matters most where the sample is
+  thinnest: the AI-config subsample is roughly a tenth of the cohort in older quarters,
+  and the `ai_vs_rest` comparison rests on 74 repos.
+- **Series that accumulate with exposure are drawn as dots, not lines.** A connected line
+  asserts that the gap between two points means something. For zero-star share that claim
+  is false — a 2020 repo has had six years to collect a star — so those charts plot
+  unconnected points with intervals. Lines are reserved for the fixed-window metrics.
 - **Abandonment is not failure.** A scratch repo that did its job in an afternoon looks
   identical to garbage from here. The trend across quarters is the interesting part.
 
 ## Layout
 
 ```
-scripts/lib.py            shared client: token, pacing, backoff, GraphQL batching, Wilson CI
+scripts/lib.py            shared client: token, pacing, backoff, GraphQL batching, Wilson CI,
+                          median/percentile
 scripts/calibrate.py      repo-ID → date curve      → data/id_calendar.json
 scripts/ai_markers.py     commit + code search      → site/data/markers.json
 scripts/sample_repos.py   cohort sampling           → site/data/cohorts.json

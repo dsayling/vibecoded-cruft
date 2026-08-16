@@ -352,6 +352,25 @@ def median(values: list[float]) -> float:
     return float(s[mid]) if len(s) % 2 else (s[mid - 1] + s[mid]) / 2
 
 
+def percentile(values: list[float], q: float) -> float:
+    """Linear-interpolated percentile, q in [0, 1].
+
+    The median of a lifespan distribution is useless here: more than half of every
+    cohort dies on day one, so the median is pinned inside the first 24 hours for all
+    27 quarters and measures the floor rather than the cohort. Upper percentiles sit
+    above the dead-on-arrival mass and actually move.
+    """
+    if not values:
+        return 0.0
+    s = sorted(values)
+    if len(s) == 1:
+        return float(s[0])
+    pos = q * (len(s) - 1)
+    lo = int(pos)
+    hi = min(lo + 1, len(s) - 1)
+    return float(s[lo] + (s[hi] - s[lo]) * (pos - lo))
+
+
 # --- resumable jsonl ---------------------------------------------------------
 
 

@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from lib import RAW_DIR, SITE_DATA, GitHub, get_token, log, write_json  # noqa: E402
+from lib import RAW_DIR, SITE_DATA, GitHub, get_token, log, median, write_json  # noqa: E402
 
 START = (2022, 1)
 
@@ -59,11 +59,106 @@ CONFIG_FILES = {
     "copilot-instructions.md": "filename:copilot-instructions.md path:.github",
 }
 
+# label -> last month whose hits provably cannot come from the tool, inclusive.
+#
+# The broad co-author trailers above buy completeness at the price of a name-collision
+# floor: real humans are called Claude, Cursor and Devin. That floor is not small and
+# it is not hypothetical — measured over the months below, Devin runs a median of 378
+# hits/month and Claude 109, every one of them years before the tool shipped. Left
+# uncorrected the site draws them as adoption on a chart headed "commits that admit a
+# robot wrote them".
+#
+# The floor is measurable precisely because these months exist: whatever the query
+# returns before a tool was released is, by construction, entirely false positives.
+# So take the median over that window and subtract it from every month.
+#
+# Dates are the first plausible month for the *trailer*, not for the product, and err
+# late — an over-long baseline only makes the correction more conservative.
+BASELINE_UNTIL = {
+    "Claude": "2025-01",          # Claude Code research preview, Feb 2025
+    "GitHub Copilot": "2023-12",  # the Copilot co-author trailer arrives with the agent
+    "Cursor": "2024-12",          # editor shipped 2023; the agent trailer is a 2025 thing
+    "Devin": "2024-12",           # announced Mar 2024, generally available Dec 2024
+    "aider": "2023-05",           # aider's first release is mid-2023
+    "OpenAI Codex": "2025-04",    # Codex agent, May 2025
+}
+
 CACHE = RAW_DIR / "markers_cache.json"
 
 # A year must clear this many hits before its months are worth querying individually.
 # Roughly one per month; below that the year is backdated noise, not adoption.
+#
+# Note this floor does NOT remove the collision problem and never could: it is annual
+# and absolute, so Devin's 4,140 collisions in 2022 clear it 345x over. Its only job is
+# saving twelve searches on a year that is genuinely empty. The subtraction above is
+# what actually corrects the numbers.
 NOISE_FLOOR = 12
+
+
+def next_month(month: str) -> str:
+    y, m = int(month[:4]), int(month[5:])
+    return f"{y + 1}-01" if m == 12 else f"{y}-{m + 1:02d}"
+
+
+def collision_floors(series: dict, months: list[str]) -> dict:
+    """Median monthly hit count over each tool's pre-release window."""
+    out = {}
+    for label, until in BASELINE_UNTIL.items():
+        vals = [v for m, v in zip(months, series.get(label) or []) if m <= until and v is not None]
+        # Too short a baseline is worse than none: one unlucky month would be subtracted
+        # from every real month in the series.
+        if len(vals) < 6:
+            out[label] = None
+            continue
+        out[label] = {
+            "per_month": round(median(vals), 1),
+            "baseline_months": len(vals),
+            "baseline_until": until,
+            "max_seen": max(vals),
+        }
+    return out
+
+
+def apply_floors(series: dict, floors: dict) -> dict:
+    """Subtract each tool's collision floor, clamped at zero. None stays None."""
+    out = {}
+    for label, vals in series.items():
+        f = (floors.get(label) or {}).get("per_month", 0.0)
+        out[label] = [None if v is None else max(0, int(round(v - f))) for v in vals]
+    return out
+
+
+def derive(payload: dict) -> dict:
+    """Recompute every field derived from the raw monthly counts.
+
+    Split out so it can be re-run over an already-published markers.json without
+    spending a single search request (`--rebuild`).
+    """
+    months, series = payload["months"], payload["series"]
+    floors = collision_floors(series, months)
+    adjusted = apply_floors(series, floors)
+    year_totals = payload.get("year_totals") or {}
+
+    # The same commits counted twelve months at a time versus one year at a time should
+    # agree and do not: measured here, monthly sums come to 2.5x the annual ones, and
+    # 86% of that gap is the single largest series. Whatever GitHub does to estimate
+    # total_count degrades as the result set grows, so the biggest number on the page is
+    # the least trustworthy one. Publish both and let the site show the range rather than
+    # picking the flattering end.
+    annual = 0
+    for label, per_year in year_totals.items():
+        until = BASELINE_UNTIL.get(label)
+        first = int(next_month(until)[:4]) if until else 0
+        for year, value in per_year.items():
+            if value and int(year) >= first:
+                annual += value
+
+    payload["collision_floors"] = floors
+    payload["series_adjusted"] = adjusted
+    payload["total_attributed_commits"] = sum(v for vals in adjusted.values() for v in vals if v)
+    payload["total_attributed_commits_raw"] = sum(v for vals in series.values() for v in vals if v)
+    payload["total_attributed_commits_annual"] = annual
+    return payload
 
 
 def months_until(end: dt.date) -> list[str]:
@@ -108,7 +203,19 @@ def write_markers(cache: dict, months: list[str], current: str, configs: dict, p
     """
     series = {label: [cache.get(f"{label}|{m}") for m in months] for label in MARKERS}
     measured = sum(1 for vals in series.values() for v in vals if v is not None)
-    total = sum(v for vals in series.values() for v in vals if v)
+
+    # Where a cell was sampled more than once, publish the observed spread. A single
+    # search is not a measurement: the same query has returned 1,180 and 95 on the same
+    # day, and the Cursor series swings 12,805 -> 993,219 -> 766,480 month to month.
+    spread = {
+        label: [
+            (lambda s: [min(s), max(s)] if s and len(s) > 1 else None)(
+                cache.get(f"{label}|{m}~s")
+            )
+            for m in months
+        ]
+        for label in MARKERS
+    }
 
     # Self-check: the same commits counted twelve months at a time versus one year at a
     # time should agree. They do for small markers and diverge badly for large ones
@@ -124,16 +231,20 @@ def write_markers(cache: dict, months: list[str], current: str, configs: dict, p
             "year_sum": year_sum,
             "ratio": round(month_sum / year_sum, 2) if year_sum else None,
         }
-    write_json(
-        SITE_DATA / "markers.json",
+    payload = derive(
         {
             "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
             "months": months,
             "queries": MARKERS,
             "config_queries": CONFIG_FILES,
             "series": series,
+            "series_spread": spread,
+            # Code search counts *files*, not repos, and a repo commonly carries several
+            # (in the cohort sample, 33 AI repos account for 50 CLAUDE.md + AGENTS.md
+            # hits). Summing these is therefore not a repo count and the site must not
+            # present it as one.
             "config_files": configs,
-            "total_attributed_commits": total,
+            "config_files_counts": "files matching, not repos; repos commonly match several",
             "partial_month": current if current in months else None,
             "incomplete": partial or measured < len(months) * len(MARKERS),
             "measured_points": measured,
@@ -146,11 +257,18 @@ def write_markers(cache: dict, months: list[str], current: str, configs: dict, p
             },
         },
     )
-    log(f"total AI-attributed commits since {months[0]}: {total:,} "
+    write_json(SITE_DATA / "markers.json", payload)
+
+    log(f"AI-attributed commits since {months[0]}: "
+        f"{payload['total_attributed_commits_annual']:,} (annual queries) – "
+        f"{payload['total_attributed_commits']:,} (monthly, collision-adjusted) "
         f"({measured}/{len(months) * len(MARKERS)} points measured)")
-    for label, vals in sorted(series.items(), key=lambda kv: -sum(v for v in kv[1] if v)):
-        got = sum(v for v in vals if v)
-        log(f"  {label:<20} {got:>12,}")
+    adj = payload["series_adjusted"]
+    for label, vals in sorted(adj.items(), key=lambda kv: -sum(v for v in kv[1] if v)):
+        floor = (payload["collision_floors"].get(label) or {}).get("per_month")
+        raw = sum(v for v in series[label] if v)
+        log(f"  {label:<20} {sum(v for v in vals if v):>12,} "
+            f"(raw {raw:>12,}, collision floor {floor if floor is not None else '?'}/mo)")
 
 
 async def main() -> None:
@@ -163,7 +281,28 @@ async def main() -> None:
         help="write markers.json from cached results without querying. Search throttling "
         "can stretch a full run over hours, and a half-finished run should still publish.",
     )
+    ap.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="recompute the derived fields of an existing site/data/markers.json in place "
+        "(collision floors, adjusted series, headline totals). No API calls.",
+    )
+    ap.add_argument(
+        "--repeat",
+        type=int,
+        default=1,
+        help="samples per (tool, month). GitHub's total_count is an estimate that varies "
+        "run to run, so one search is not a measurement; 3 gives a median and a spread. "
+        "Costs one full extra pass per extra sample, so pair it with --months.",
+    )
     args = ap.parse_args()
+
+    if args.rebuild:
+        path = SITE_DATA / "markers.json"
+        if not path.exists():
+            sys.exit(f"Missing {path} — nothing to rebuild.")
+        write_json(path, derive(json.loads(path.read_text())))
+        return
 
     today = dt.datetime.now(dt.timezone.utc).date()
     months = args.months.split(",") if args.months else months_until(today)
@@ -193,14 +332,28 @@ async def main() -> None:
     gh = GitHub(get_token(), concurrency=4)
     try:
 
-        async def count(key: str, query: str) -> int:
-            if key in cache:
-                return cache[key]
-            res = await gh.search("commits", query)
-            cache[key] = (res or {}).get("total_count", 0)
-            # Persist immediately. Search throttling can stall a run for minutes at a
-            # time, and a stall that gets killed must not throw away completed work.
-            save_cache(cache)
+        def samples_for(key: str) -> list[int]:
+            """Every observation of one cell. Older caches hold a bare int; adopt it."""
+            got = cache.get(f"{key}~s")
+            if got is None:
+                return [cache[key]] if key in cache else []
+            return got
+
+        def needs(key: str, repeat: int) -> bool:
+            return len(samples_for(key)) < repeat
+
+        async def count(key: str, query: str, repeat: int = 1) -> int:
+            samples = samples_for(key)
+            while len(samples) < repeat:
+                res = await gh.search("commits", query)
+                samples.append((res or {}).get("total_count", 0))
+                cache[f"{key}~s"] = samples
+                # The published value is the median of the samples, not the last one —
+                # a single draw from an estimator this noisy is not worth publishing.
+                cache[key] = int(median(samples))
+                # Persist immediately. Search throttling can stall a run for minutes at a
+                # time, and a stall that gets killed must not throw away completed work.
+                save_cache(cache)
             return cache[key]
 
         # Search is the scarcest budget here, so skip months that cannot contain a
@@ -230,17 +383,23 @@ async def main() -> None:
                                 cache[f"{label}|{m}"] = 0
             save_cache(cache)
 
-        todo = [(label, m) for label, m in todo if f"{label}|{m}" not in cache]
+        todo = [(label, m) for label, m in todo if needs(f"{label}|{m}", args.repeat)]
         if todo:
-            log(f"{len(todo)} month searches (~{len(todo) * gh.search_min_interval / 60:.0f} min)")
+            searches = sum(args.repeat - len(samples_for(f"{l}|{m}")) for l, m in todo)
+            log(f"{len(todo)} month cells, {searches} searches "
+                f"(~{searches * gh.search_min_interval / 60:.0f} min)")
         for done, (label, month) in enumerate(todo, 1):
-            await count(f"{label}|{month}", f"{MARKERS[label]} committer-date:{month_range(month)}")
+            await count(
+                f"{label}|{month}",
+                f"{MARKERS[label]} committer-date:{month_range(month)}",
+                repeat=args.repeat,
+            )
             if done % 25 == 0:
                 save_cache(cache)
-                log(f"  {done}/{len(todo)} searches")
+                log(f"  {done}/{len(todo)} cells")
         save_cache(cache)
 
-        log("counting repos by AI config file")
+        log("counting AI config files (files matched, not repos)")
         configs = {}
         for label, q in CONFIG_FILES.items():
             res = await gh.search("code", q)
