@@ -117,8 +117,12 @@ body {
 .chart svg { display: block; width: 100%; height: auto; min-width: 300px; touch-action: none; }
 
 .tooltip {
-  position: absolute;
-  top: 8px;
+  /* Fixed, not absolute: a wide chart's container clips overflow on both axes
+     (CSS pairs overflow-x and overflow-y once either scrolls), and a six-series
+     tooltip is routinely taller than a short mobile chart. Fixed positioning is
+     placed and clamped against the viewport in JS instead, so it can never be
+     cut off by its own chart. */
+  position: fixed;
   z-index: 5;
   pointer-events: none;
   min-width: 130px;
@@ -141,12 +145,19 @@ body {
   margin-bottom: 5px;
 }
 
+.tooltip .row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
 .tooltip .k {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   color: var(--ink-dim);
-  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .tooltip .k i { width: 8px; height: 8px; border-radius: 2px; flex: none; }
@@ -158,13 +169,11 @@ body {
 .tooltip .spread { color: var(--ink-faint); font-weight: 400; }
 
 .tooltip b {
-  float: right;
   color: var(--ink);
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
-
-.tooltip b::after { content: ''; display: block; clear: both; }
 
 .axis-line { stroke: var(--grid); stroke-width: 1; }
 .grid-line { stroke: var(--grid); stroke-width: 1; stroke-dasharray: 2 4; }

@@ -284,7 +284,7 @@ function attachHover(mount, f, labels, series, opts = {}) {
       dots[k].setAttribute('cx', f.x(i));
       dots[k].setAttribute('cy', f.y(pointAt ? pointAt(k, i) : v));
       dots[k].setAttribute('opacity', 1);
-      rows.push(`<span class="k"><i style="background:${s.color}"></i>${s.label}</span><b>${format(v, i, s)}</b>`);
+      rows.push(`<div class="row"><span class="k"><i style="background:${s.color}"></i>${s.label}</span><b>${format(v, i, s)}</b></div>`);
     });
 
     // Sample size belongs next to every number on this page: the cohorts run from 1,174
@@ -294,11 +294,20 @@ function attachHover(mount, f, labels, series, opts = {}) {
     tip.innerHTML = `<div class="when">${titles[i]}${sub ? `<span class="n">${sub}</span>` : ''}</div>`
       + (rows.join('') || '<div class="when">not measured</div>');
     tip.hidden = false;
-    // Flip the tooltip to the left of the cursor near the right edge so it never
-    // gets clipped by the panel.
-    const frac = f.x(i) / f.W;
-    tip.style.left = `${frac * 100}%`;
-    tip.style.transform = frac > 0.6 ? 'translate(calc(-100% - 14px), 0)' : 'translate(14px, 0)';
+    // Fixed positioning, clamped to the viewport rather than the chart container:
+    // the container clips overflow on both axes, and a six-series tooltip is
+    // routinely taller than a short mobile chart. Measuring the rendered box lets
+    // us flip and clamp against what actually got laid out (CI text, long labels).
+    const px = rect.left + (f.x(i) / f.W) * rect.width;
+    const py = rect.top + (f.M.t / f.H) * rect.height;
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    let left = px + 14 + tw > window.innerWidth ? px - tw - 14 : px + 14;
+    left = Math.max(4, Math.min(left, window.innerWidth - tw - 4));
+    const top = Math.max(4, Math.min(py, window.innerHeight - th - 4));
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+    tip.style.transform = 'none';
   };
 
   const leave = () => {

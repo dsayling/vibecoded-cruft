@@ -200,9 +200,14 @@ roughly 20 requests with `--pause` between quarters.
   observation age ships in `observation_age_days` and is printed on the page.
 - **`config_files` counts files, not repos.** Code search returns file matches, and repos
   commonly carry several — 33 repos with any AI config in the 2026Q3 sample account for 50
-  `CLAUDE.md` + `AGENTS.md` hits. Summing those four numbers is not a repo count, and the
+  `CLAUDE.md` + `AGENTS.md` hits. Summing those numbers is not a repo count, and the
   site no longer labels it as one. The measured union (`ai_any_count / ai_checked`) is the
-  figure with a real denominator.
+  figure with a real denominator. Checked filenames: `CLAUDE.md`, `AGENTS.md`,
+  `.cursorrules`, `.windsurfrules`, `.github/copilot-instructions.md`, and any
+  `*.md` under `.github/instructions/` (Copilot's path-scoped instructions — filenames
+  vary per repo, so it's counted by directory). The per-repo cohort check
+  (`ROOT_MARKERS`/`DOTGITHUB_MARKERS` in `scripts/lib.py`) additionally covers `.claude`,
+  `.cursor`, `GEMINI.md`, `.clinerules`, and `.aider.conf.yml`/`.yaml`.
 - **`isEmpty` comes from GraphQL only.** Search exposes no empty flag and its `size` is
   rounded to whole KB, so deriving one from `size == 0` would call any repo with a short
   README empty. Search rows record `null`, and `empty` is a proportion of `empty_checked`

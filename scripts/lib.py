@@ -273,7 +273,10 @@ ROOT_MARKERS = {
     "cline": {".clinerules"},
     "aider": {".aider.conf.yml", ".aider.conf.yaml"},
 }
-DOTGITHUB_MARKERS = {"copilot": {"copilot-instructions.md"}}
+# "instructions" is the directory Copilot's path-scoped instructions live in
+# (.github/instructions/*.instructions.md) — its filenames vary per repo, but the tree
+# listing already has the directory name for free, so no second query is needed.
+DOTGITHUB_MARKERS = {"copilot": {"copilot-instructions.md", "instructions"}}
 
 AI_CONFIG_KEYS = tuple(ROOT_MARKERS) + tuple(DOTGITHUB_MARKERS)
 

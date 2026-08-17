@@ -56,7 +56,12 @@ CONFIG_FILES = {
     "CLAUDE.md": "filename:CLAUDE.md path:/",
     "AGENTS.md": "filename:AGENTS.md path:/",
     ".cursorrules": "filename:.cursorrules path:/",
+    ".windsurfrules": "filename:.windsurfrules path:/",
     "copilot-instructions.md": "filename:copilot-instructions.md path:.github",
+    # Path-scoped Copilot instructions: any number of *.instructions.md files under
+    # .github/instructions/, each applying to a glob via frontmatter. Filenames vary
+    # per repo, so this counts the directory rather than one exact name.
+    ".github/instructions/*.md": "path:.github/instructions extension:md",
 }
 
 # label -> last month whose hits provably cannot come from the tool, inclusive.
